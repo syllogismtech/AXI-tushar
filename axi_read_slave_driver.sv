@@ -27,14 +27,14 @@ task run_phase(uvm_phase phase);
         vif.rid    <=  vif.arid;
         vif.rvalid <= 1;
         vif.rlast  <= (i == txn.burst_len);
-
-        case (txn.arsize)
-          3'd0: vif.rdata <= txn.rdata_array[i][7:0];
-          3'd1: vif.rdata <= txn.rdata_array[i][15:0];
-          3'd2: vif.rdata <= txn.rdata_array[i][31:0];
-          3'd3: vif.rdata <= txn.rdata_array[i][63:0];
-          default: vif.rdata <= 64'hDEADBEEF_DEADBEEF;
-        endcase
+        vif.rdata  <=txn.araddr;
+       // case (txn.arsize)
+         // 3'd0: vif.rdata <= txn.rdata_array[i][7:0];
+          //3'd1: vif.rdata <= txn.rdata_array[i][15:0];
+          //3'd2: vif.rdata <= txn.rdata_array[i][31:0];
+          //3'd3: vif.rdata <= txn.rdata_array[i][63:0];
+          //default: vif.rdata <= 64'hDEADBEEF_DEADBEEF;
+        //endcase
 
         @(posedge vif.clk);
         while (!vif.rready) @(posedge vif.clk);
