@@ -20,8 +20,8 @@ task run_phase(uvm_phase phase);
     if (vif.arvalid && vif.arready) begin
      // bit [3:0] read_id = vif.arid;
 
-      int delay = $urandom_range(1, 5);
-      repeat (delay) @(posedge vif.clk);
+      
+      repeat (txn.delay_cycles) @(posedge vif.clk);
 
       for (int i = 0; i <= txn.burst_len; i++) begin
         vif.rid    <=  vif.arid;
