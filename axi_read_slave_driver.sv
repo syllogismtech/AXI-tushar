@@ -14,7 +14,7 @@ class axi_read_slave_driver extends uvm_driver #(axi_read_slave_transaction);
 task run_phase(uvm_phase phase);
   forever begin
     axi_read_data_txn txn;
-    assert(txn.randomize() with { delay_type == 3; });
+    assert(txn.randomize() with { delay_type == 2; });
     seq_item_port.get_next_item(txn);  // Get item from sequence
 
     @(posedge vif.clk);
