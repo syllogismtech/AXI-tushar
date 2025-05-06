@@ -1,10 +1,10 @@
-class adder_seq_delay0 extends uvm_sequence #(axi_read_data_resp_txn);
+class axi_read_seq_delay0 extends uvm_sequence #(axi_read_data_resp_txn);
   `uvm_object_utils(adder_seq_delay0)
 
   axi_read_data_resp_txn txn;
   longint loop_count = 10;
 
-  function new(string name = "adder_seq_delay0");
+  function new(string name = "axi_read_seq_delay0");
     super.new(name);
   endfunction
 
@@ -18,13 +18,13 @@ class adder_seq_delay0 extends uvm_sequence #(axi_read_data_resp_txn);
   endtask
 endclass
 
-class adder_seq_random_delay extends uvm_sequence #(adder_sequence_item);
+class axi_read_seq_random_delay extends uvm_sequence #(axi_read_data_resp_txn);
   `uvm_object_utils(adder_seq_random_delay)
 
   axi_read_data_resp_txn txn;
   longint loop_count = 10;
 
-  function new(string name = "adder_seq_random_delay");
+  function new(string name = "axi_read_seq_random_delay");
     super.new(name);
   endfunction
 
@@ -38,13 +38,13 @@ class adder_seq_random_delay extends uvm_sequence #(adder_sequence_item);
   endtask
 endclass
 
-class adder_seq_delay15 extends uvm_sequence #(adder_sequence_item);
+class axi_read_seq_delay15 extends uvm_sequence #(axi_read_data_resp_txn);
   `uvm_object_utils(adder_seq_delay15)
 
   axi_read_data_resp_txn txn;
   longint loop_count = 10;
 
-  function new(string name = "adder_seq_delay15");
+  function new(string name = "axi_read_seq_delay15");
     super.new(name);
   endfunction
 
