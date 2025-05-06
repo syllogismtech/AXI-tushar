@@ -1,25 +1,25 @@
-class adder_test extends uvm_test;
+class axi_test extends uvm_test;
 
-    uvm_component_utils(adder_test)
+    uvm_component_utils(axi_test)
     
     function new(string name = "", uvm_component parent);
         super.new(name, parent);
     endfunction
     
-    adder_env env_h;
+    axi_env env_h;
     int file_h;
 
-    adder_seq_delay0 seq_delay0;
-    adder_seq_random_delay seq_rand_delay;
-    adder_seq_delay15 seq_delay15;
+    axi_read_seq_delay0 seq_delay0;
+    axi_read_seq_random_delay seq_rand_delay;
+    axi_read_seq_delay15 seq_delay15;
 
     function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         env_h = adder_env::type_id::create("env_h", this);
 
-        seq_delay0 = adder_seq_delay0::type_id::create("seq_delay0");
-        seq_rand_delay = adder_seq_random_delay::type_id::create("seq_rand_delay");
-        seq_delay15 = adder_seq_delay15::type_id::create("seq_delay15");
+        seq_delay0 = axi_read_seq_delay0::type_id::create("seq_delay0");
+        seq_rand_delay = axi_read_seq_random_delay::type_id::create("seq_rand_delay");
+        seq_delay15 = axi_read_seq_delay15::type_id::create("seq_delay15");
     endfunction
     
     function void end_of_elaboration_phase(uvm_phase phase);
@@ -44,4 +44,4 @@ class adder_test extends uvm_test;
         #10;
         phase.drop_objection(this);
     endtask
-endclass: adder_test
+endclass: axi_test
