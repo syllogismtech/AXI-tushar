@@ -24,7 +24,7 @@ task run_phase(uvm_phase phase);
       repeat (txn.delay_cycles) @(posedge vif.clk);
 
       for (int i = 0; i <= txn.burst_len; i++) begin
-        vif.rid    <=  txn.arid;
+        vif.rid    <=  vif.arid;
         vif.rvalid <= 1;
         vif.rlast  <= (i == txn.burst_len);
         case (txn.rdata_mode)
