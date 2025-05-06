@@ -21,11 +21,11 @@ class axi_read_seq_all_delays extends uvm_sequence #(axi_read_data_resp_txn);
         2: txn.delay_cycles=15;
       endcase
 
-      case (txn.data_case)
-        0: txn.rdata = txn.addr;
-        1: txn.rdata = ~txn.addr;
-        2: txn.rdata = 32'hF;
-      endcase
+      //case (txn.data_case)
+       // 0: txn.rdata = txn.addr;
+       // 1: txn.rdata = ~txn.addr;
+        //2: txn.rdata = 32'hF;
+      //endcase
 
       `uvm_info("SEQ", $sformatf("addr=%h delay_type=%0d data_case=%0d rdata=%h",
                    txn.addr, txn.delay_type, txn.data_case, txn.rdata), UVM_MEDIUM)
