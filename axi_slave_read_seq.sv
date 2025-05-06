@@ -16,9 +16,9 @@ class axi_read_seq_all_delays extends uvm_sequence #(axi_read_data_resp_txn);
       finish_item(txn);
 
       case (txn.delay_type)
-        0: #(0);
-        1: #( $urandom_range(1, 14) );
-        2: #(15);
+        0: txn.delay_cycles=0;
+        1: txn.delay_cycles=($urandom_range(1, 14) );
+        2: txn.delay_cycles=15;
       endcase
 
       case (txn.data_case)
