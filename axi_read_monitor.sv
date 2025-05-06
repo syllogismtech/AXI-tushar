@@ -44,25 +44,33 @@ class axi_read_monitor extends uvm_monitor;
     end
   endtask
 
-  task monitor_r_channel();
-    axi_read_data_txn r_txn;
-    forever begin
-      @(posedge vif.aclk);
-      if (vif.rvalid && vif.rready) begin
-        if (r_txn == null) begin
-          r_txn = new();
-          r_txn.id = vif.rid;
-        end
-        r_txn.data_queue.push_back(vif.rdata);
-        r_txn.resp_queue.push_back(vif.rresp);
-        if (vif.rlast) begin
-          r_port.write(r_txn);
-          -> r_event;
-          `uvm_info(get_type_name(), $sformatf("Captured R txn: %s", r_txn.convert2string()), UVM_LOW)
-          r_txn = null;
-        end
+task monitor_r_channel();
+  axi_read_data_txn r_txn;
+  int beat_count = 0;
+  int expected_burst_len = 0;
+  forever begin
+    @(posedge vif.aclk);
+    if (vif.rvalid && vif.rready) begin
+      if (r_txn == null) begin
+        r_txn = new();
+        r_txn.id = vif.rid;
+        beat_count = 0;
+        expected_burst_len = 16; 
+      end
+      beat_count++;
+      r_txn.data_queue.push_back(vif.rdata);
+      r_txn.resp_queue.push_back(vif.rresp);
+
+      if (beat_count > expected_burst_len) begin
+        `uvm_error(get_type_name(), $sformatf("Too many rdata beats: got %0d, expected %0d", beat_count, expected_burst_len))
+      end
+      if (vif.rlast) begin
+        r_port.write(r_txn);
+        -> r_event;
+        `uvm_info(get_type_name(), $sformatf("Captured R txn: %s", r_txn.convert2string()), UVM_LOW)
+        r_txn = null;
       end
     end
-  endtask
-
+  end
+endtask
 endclass
