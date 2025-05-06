@@ -27,7 +27,7 @@ task run_phase(uvm_phase phase);
         vif.rid    <=  vif.arid;
         vif.rvalid <= 1;
         vif.rlast  <= (i == txn.burst_len);
-        vif.rdata  <=txn.araddr+i;
+        vif.rdata  <=txn.rdata;
        // case (txn.arsize)
          // 3'd0: vif.rdata <= txn.rdata_array[i][7:0];
           //3'd1: vif.rdata <= txn.rdata_array[i][15:0];
