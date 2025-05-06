@@ -1,4 +1,4 @@
-class axi_read_slave_driver extends uvm_driver #(axi_read_slave_transaction);
+class axi_read_slave_driver extends uvm_driver #(axi_read_data_resp_transaction);
   virtual read_interface vif;
   `uvm_component_utils(axi_read_slave_driver)
 
