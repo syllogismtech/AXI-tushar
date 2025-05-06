@@ -30,9 +30,9 @@ task run_phase(uvm_phase phase);
         vif.rvalid <= 1;
         vif.rlast  <= (i == burst_len);
         case (txn.rdata_mode)
-         DIRECT: vif.rdata <= vif.araddr+i;
-         RANDOM: vif.rdata <= $urandom();
-         FIXED : vif.rdata <= 64'hFFFF_FFFF_FFFF_FFFF;
+         0: vif.rdata <= vif.araddr+i;
+         1: vif.rdata <= $urandom();
+         2 : vif.rdata <= 64'hFFFF_FFFF_FFFF_FFFF;
         endcase
        // case (txn.arsize)
          // 3'd0: vif.rdata <= txn.rdata_array[i][7:0];
