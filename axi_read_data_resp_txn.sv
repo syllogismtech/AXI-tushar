@@ -7,7 +7,7 @@ class axi_read_data_resp_txn extends uvm_sequence_item;
   rdata_mode_e rdata_mode;
 
   constraint delay_type_c { delay_type inside {0, 1, 2}; }
-  constraint data_case_c  { data_case  inside {0, 1, 2}; }
+ // constraint data_case_c  { data_case  inside {0, 1, 2}; }
 
   `uvm_object_utils(axi_read_data_resp_txn)
 
