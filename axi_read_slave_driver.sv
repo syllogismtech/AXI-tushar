@@ -19,7 +19,6 @@ task run_phase(uvm_phase phase);
     bit [3:0] arid;
     @(posedge vif.clk);
     if (vif.arvalid && vif.arready) begin
-      // bit [3:0] read_id = vif.arid;
       burst_len=vif.arlen+1+txn.extra_burst_len;
       arid=vif.arid;
       
