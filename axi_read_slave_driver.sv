@@ -24,9 +24,14 @@ task run_phase(uvm_phase phase);
       repeat (txn.delay_cycles) @(posedge vif.clk);
 
       for (int i = 0; i <= txn.burst_len; i++) begin
-        vif.rid    <=  vif.arid;
+        vif.rid    <=  txn.arid;
         vif.rvalid <= 1;
         vif.rlast  <= (i == txn.burst_len);
+        case (txn.rdata_mode)
+         DIRECT: vif.rdata <= txn.araddr;
+         RANDOM: vif.rdata <= $urandom();
+         FIXED : vif.rdata <= 64'hFFFF_FFFF_FFFF_FFFF;
+        endcase
         vif.rdata  <=txn.rdata;
        // case (txn.arsize)
          // 3'd0: vif.rdata <= txn.rdata_array[i][7:0];
