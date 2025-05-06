@@ -1,7 +1,7 @@
-class adder_seq_delay0 extends uvm_sequence #(adder_sequence_item);
+class adder_seq_delay0 extends uvm_sequence #(axi_read_data_resp_txn);
   `uvm_object_utils(adder_seq_delay0)
 
-  adder_sequence_item txn;
+  axi_read_data_resp_txn txn;
   longint loop_count = 10;
 
   function new(string name = "adder_seq_delay0");
@@ -21,7 +21,7 @@ endclass
 class adder_seq_random_delay extends uvm_sequence #(adder_sequence_item);
   `uvm_object_utils(adder_seq_random_delay)
 
-  adder_sequence_item txn;
+  axi_read_data_resp_txn txn;
   longint loop_count = 10;
 
   function new(string name = "adder_seq_random_delay");
@@ -41,7 +41,7 @@ endclass
 class adder_seq_delay15 extends uvm_sequence #(adder_sequence_item);
   `uvm_object_utils(adder_seq_delay15)
 
-  adder_sequence_item txn;
+  axi_read_data_resp_txn txn;
   longint loop_count = 10;
 
   function new(string name = "adder_seq_delay15");
