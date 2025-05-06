@@ -19,4 +19,60 @@ class axi_slave_read_seq extends uvm_sequence #(axi_read_data_txn);
     start_item(txn);
     finish_item(txn);
   endtask
+endclass:axi_slave_read_seq
+
+class adder_seq_delay0 extends uvm_sequence #(adder_sequence_item);
+  `uvm_object_utils(adder_seq_delay0)
+
+  function new(string name = "adder_seq_delay0");
+    super.new(name);
+  endfunction
+
+  task body();
+    repeat (10) begin
+      adder_sequence_item req = adder_sequence_item::type_id::create("req");
+      start_item(req);
+      void'(req.randomize() with { delay_type == 0; });
+      req.do_randomize_delay();
+      finish_item(req);
+    end
+  endtask
 endclass
+
+class adder_seq_random_delay extends uvm_sequence #(adder_sequence_item);
+  `uvm_object_utils(adder_seq_random_delay)
+
+  function new(string name = "adder_seq_random_delay");
+    super.new(name);
+  endfunction
+
+  task body();
+    repeat (10) begin
+      adder_sequence_item req = adder_sequence_item::type_id::create("req");
+      start_item(req);
+      void'(req.randomize() with { delay_type == RANDOM_DELAY; });
+      req.do_randomize_delay();
+      finish_item(req);
+    end
+  endtask
+endclass
+
+class adder_seq_delay15 extends uvm_sequence #(adder_sequence_item);
+  `uvm_object_utils(adder_seq_delay15)
+
+  function new(string name = "adder_seq_delay15");
+    super.new(name);
+  endfunction
+
+  task body();
+    repeat (10) begin
+      adder_sequence_item req = adder_sequence_item::type_id::create("req");
+      start_item(req);
+      void'(req.randomize() with { delay_type == 15; });
+      req.do_randomize_delay();
+      finish_item(req);
+    end
+  endtask
+endclass
+
+
