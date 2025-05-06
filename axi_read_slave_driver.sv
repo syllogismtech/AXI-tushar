@@ -1,4 +1,4 @@
-class axi_read_slave_driver extends uvm_driver #(axi_read_data_resp_transaction);
+class axi_read_slave_driver extends uvm_driver #(axi_read_data_resp_txn);
   virtual read_interface vif;
   `uvm_component_utils(axi_read_slave_driver)
 
@@ -13,8 +13,8 @@ class axi_read_slave_driver extends uvm_driver #(axi_read_data_resp_transaction)
 
 task run_phase(uvm_phase phase);
   forever begin
-    axi_read_data_txn txn;
-    seq_item_port.get_next_item(txn);  // Get item from sequence
+    axi_read_data_resp_txn txn;
+    seq_item_port.get_next_item(txn); 
 
     @(posedge vif.clk);
     if (vif.arvalid && vif.arready) begin
@@ -44,7 +44,7 @@ task run_phase(uvm_phase phase);
       end
     end
 
-    seq_item_port.item_done();  // Notify sequence that item is done
+    seq_item_port.item_done();  
   end
 endtask
 
