@@ -3,6 +3,7 @@ class axi_read_data_resp_txn extends uvm_sequence_item;
   rand bit [31:0] rdata;
   rand int delay_type;    
   rand int data_case;     
+  rand extra_burst_len;
   typedef enum {DIRECT, RANDOM, FIXED} rdata_mode_e;
   rdata_mode_e rdata_mode;
 
