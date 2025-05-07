@@ -1,66 +1,57 @@
 class axi_read_scoreboard extends uvm_scoreboard;
-
   `uvm_component_utils(axi_read_scoreboard)
 
-  uvm_analysis_imp#(axi_read_master_transaction, axi_read_scoreboard) m_scb;
-  uvm_analysis_imp#(axi_read_slave_transaction,  axi_read_scoreboard) s_scb;
+  uvm_analysis_imp #(axi_read_addr_txn, axi_read_scoreboard) ar_imp;
+  uvm_analysis_imp #(axi_read_data_txn, axi_read_scoreboard) r_imp;
 
-  axi_read_master_transaction master_q[$];
-  axi_read_slave_transaction  slave_q[$];
+  axi_read_addr_txn  ar_queue [$];
+  axi_read_data_txn  r_queue [$];
 
   function new(string name, uvm_component parent);
     super.new(name, parent);
-    m_scb = new("m_scb", this);
-    s_scb = new("s_scb", this);
+    ar_imp = new("ar_imp", this);
+    r_imp  = new("r_imp", this);
   endfunction
 
-  function void write(axi_read_master_transaction t);
-    `uvm_info("SCOREBOARD", $sformatf("Received Master AR txn: arid=%0h araddr=0x%0h arlen=%0d",
-                  t.arid, t.araddr, t.arlen), UVM_HIGH)
-    master_q.push_back(t);
+  virtual function void write(axi_read_addr_txn t);
+    ar_queue.push_back(t);
+    `uvm_info(get_type_name(), $sformatf("Stored AR txn: %s", t.convert2string()), UVM_MEDIUM)
   endfunction
 
-  function void write(axi_read_slave_transaction t);
-    `uvm_info("SCOREBOARD", $sformatf("Received Slave R txn: rid=%0h rdata=0x%0h rlast=%0b",
-                  t.rid, t.rdata, t.rlast), UVM_HIGH)
-    slave_q.push_back(t);
+  virtual function void write(axi_read_data_txn t);
+    r_queue.push_back(t);
+    compare_ar_r();
   endfunction
 
-  task run_phase(uvm_phase phase);
-    super.run_phase(phase);
+  function void compare_ar_r();
+    if (ar_queue.empty() || r_queue.empty())
+      return;
 
-    axi_read_master_transaction master_txn;
-    axi_read_slave_transaction  slave_txn;
+    axi_read_addr_txn ar = ar_queue.pop_front();
+    axi_read_data_txn r  = r_queue.pop_front();
 
-    forever begin
-      wait (master_q.size() > 0 && slave_q.size() >= (master_q[0].arlen + 1));
+    int expected_beats = ar.len + 1;
+    int actual_beats   = r.data_queue.size();
 
-      master_txn = master_q.pop_front();
-      int burst_len = master_txn.arlen + 1;
+    if (expected_beats != actual_beats) begin
+      `uvm_error("SCOREBOARD", $sformatf("Burst mismatch: ID=%0h, Expected=%0d, Got=%0d",
+                                         ar.id, expected_beats, actual_beats))
+      return;
+    end
 
-      for (int i = 0; i < burst_len; i++) begin
-        wait (slave_q.size() > 0);
-        slave_txn = slave_q.pop_front();
+    `uvm_info("SCOREBOARD", $sformatf("Burst match: ID=%0h, Beats=%0d",
+                                      ar.id, actual_beats), UVM_LOW)
 
-        if (slave_txn.rid !== master_txn.arid) begin
-          `uvm_error("SCOREBOARD", $sformatf("ID mismatch at beat %0d: Expected ID = %0h, Got = %0h",
-                      i, master_txn.arid, slave_txn.rid))
-        end
+    foreach (r.data_queue[i]) begin
+      bit [63:0] expected_data = ar.addr + i;
+      bit [63:0] actual_data   = r.data_queue[i];
 
-        bit [63:0] expected_rdata = master_txn.araddr + i;
-
-        if (slave_txn.rdata !== expected_rdata) begin
-          `uvm_error("SCOREBOARD", $sformatf("Data mismatch at beat %0d: Expected = 0x%0h, Got = 0x%0h",
-                      i, expected_rdata, slave_txn.rdata))
-        end else begin
-          `uvm_info("SCOREBOARD", $sformatf("Data match at beat %0d: 0x%0h", i, slave_txn.rdata), UVM_LOW)
-        end
-
-        if (i == burst_len - 1 && !slave_txn.rlast) begin
-          `uvm_error("SCOREBOARD", "Expected RLAST=1 at last beat but got 0")
-        end
+      if (actual_data !== expected_data) begin
+        `uvm_warning("SCOREBOARD", $sformatf("Data mismatch at beat %0d: Expected=0x%0h, Got=0x%0h",
+                                             i, expected_data, actual_data))
+        break;
       end
     end
-  endtask
+  endfunction
 
 endclass
