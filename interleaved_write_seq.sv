@@ -37,7 +37,6 @@ class interleaved_write_seq extends uvm_sequence #(uvm_sequence_item);
     m0_read.addr = 32'h0002_0700;
     m0_read.trans_type = READ;
 
-    // --- Master 1 reads ---
     m1_read = axi_transaction::type_id::create("m1_read");
     m1_read.addr = 32'h0002_0704;
     m1_read.trans_type = READ;
