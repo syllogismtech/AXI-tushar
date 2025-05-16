@@ -10,7 +10,6 @@ class invalid_addr_seq extends uvm_sequence #(uvm_sequence_item);
   task body();
     axi_transaction write_tr, read_tr;
 
-    // Invalid Write
     write_tr = axi_transaction::type_id::create("write_tr");
     write_tr.addr = 32'h0004_0000;
     write_tr.data = 32'hDEADBEEF;
@@ -20,7 +19,6 @@ class invalid_addr_seq extends uvm_sequence #(uvm_sequence_item);
     start_item_on(write_tr, m0_seqr);
     finish_item_on(write_tr, m0_seqr);
 
-    // Invalid Read
     read_tr = axi_transaction::type_id::create("read_tr");
     read_tr.addr = 32'h0004_0000;
     read_tr.trans_type = READ;
