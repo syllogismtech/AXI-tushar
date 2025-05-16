@@ -10,7 +10,6 @@ class write_read_delay_seq extends uvm_sequence #(uvm_sequence_item);
   task body();
     axi_transaction write_tr, read_tr;
 
-    // 1. Write to Slave 2
     write_tr = axi_transaction::type_id::create("write_tr");
     write_tr.addr = 32'h0002_0200;
     write_tr.data = 32'hABCDEF01;
@@ -20,7 +19,6 @@ class write_read_delay_seq extends uvm_sequence #(uvm_sequence_item);
     start_item_on(write_tr, m0_seqr);
     finish_item_on(write_tr, m0_seqr);
 
-    // 2. Read from same address
     read_tr = axi_transaction::type_id::create("read_tr");
     read_tr.addr = 32'h0002_0200;
     read_tr.trans_type = READ;
